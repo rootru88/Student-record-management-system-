@@ -1,0 +1,108 @@
+#include<iostream>
+using namespace std;
+struct student{
+    string name;
+    float percentage;
+    string roll;
+    string discipline;
+    student* next;
+};
+int main(){
+int how;
+cout<<"How many number of student you want to store:";
+cin>>how;
+student* list [how];
+for(int i=0;i<how;i++){
+    list[i]=new student();
+      cout<<"\nEnter Roll number:";
+      cin>>list[i]->roll;
+      cout<<"\nEnter name:";
+      cin>>list[i]->name;
+      cout<<"\nEnter percentage:";
+      cin>>list[i]->percentage;
+      cout<<"\nEnter student's discipline:";
+      cin>>list[i]->discipline;
+   }
+   for (int i = 0; i < how - 1; i++) {
+        list[i]->next = list[i + 1];
+    }
+    list[how-1]->next=nullptr;
+
+int men;
+ask_menu:
+cout<<"For displaying all student enter '1'\nTo search a student enter '2'\nTo delete a record of student enter '3'\n";
+cin>>men;
+switch (men){
+
+case 1:{
+student* temp=list[0];
+while(temp !=nullptr){
+cout<<temp->name<<"->Roll number:"<<temp->roll<<"->Percentage:"<<temp->percentage<<"->Discipline:"<<temp->discipline<<endl;
+temp=temp->next;
+}
+break;
+}
+case 2:{
+ask_name:
+string num;
+cout<<"\nEnter roll number of a student to access his/her record:";
+cin>>num;
+bool found= false;
+for (int i = 0; i < how; i++) {
+    if (list[i]->roll==num) {
+       cout<<list[i]->name<<"->Roll number:"<<list[i]->roll<<"->Percentage:"<<list[i]->percentage<<"->Discipline"<<list[i]->discipline<<endl;
+        found=true;
+        break;
+    }
+}
+    if(!found){
+        cout<<"Name not found try again"<<endl;
+           goto ask_name;
+    }
+break;
+}
+case 3: {
+    string roll;
+    cout<<"\nEnter Roll number of the student to delete:";
+    cin>>roll;
+    student*temp=list[0]; 
+    student*prev=nullptr;
+    bool found=false;
+    for (int i = 0; i < how; i++) {
+        if (list[i]->roll== roll) {
+            found=true;
+            if (prev==nullptr){
+                list[0]=temp->next;
+            } else {
+                prev->next=temp->next;
+            }
+            delete list[i];
+            for (int j= i;j<how-1;j++) {
+                list[j]=list[j+1];
+            }
+            list[how-1]=nullptr; 
+            how--; 
+            cout<<"Student deleted successfully\n";
+            break;
+        }
+        prev=list[i];
+        temp=temp->next;
+    }
+    if (!found)
+     {
+        cout<<"Student not found\n";
+    }
+    student* j=list[0];
+        while(j!=nullptr){
+          cout<<j->name<<"->Roll number:"<<j->roll<<"->Percentage:"<<j->percentage<<"->Discipline:"<<j->discipline<<endl;
+           j=j->next;
+        }
+    break;
+}
+default:{
+    cout<<"Invalid choice";
+    goto ask_menu;
+}
+}
+  return 0;
+}
